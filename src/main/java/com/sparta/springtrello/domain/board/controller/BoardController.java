@@ -1,76 +1,67 @@
 package com.sparta.springtrello.domain.board.controller;
 
+import com.sparta.springtrello.common.response.SuccessResponse;
+import com.sparta.springtrello.domain.board.dto.request.BoardCreateDto;
+import com.sparta.springtrello.domain.board.dto.request.BoardUpdateRequest;
+import com.sparta.springtrello.domain.board.dto.response.BoardDetailResponse;
+import com.sparta.springtrello.domain.board.dto.response.BoardResponse;
+import com.sparta.springtrello.domain.board.dto.response.BoardUpdateResponse;
 import com.sparta.springtrello.domain.board.service.BoardService;
+import com.sparta.springtrello.entity.Board;
+import com.sparta.springtrello.entity.User;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/boards")
 public class BoardController {
+
     private final BoardService boardService;
 
-    @PostMapping("")
-    public ResponseEntity<String> inputBoard(
-            @RequestBody BoardRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
+
+    // Board 생성
+    @PostMapping
+    public ResponseEntity<SuccessResponse<BoardResponse>> createBoard(
+            User user, @Valid @RequestBody BoardCreateDto request
     ) {
-        Long boardId = boardService.save(requestDto, userDetails.getUser()
-        );
-
-        return ResponseEntity.created(URI.create("/api/boards/" + boardId))
-                .body("보드가 정상적으로 생성되었습니다.");
-
+        return ResponseEntity.ok(SuccessResponse.of(boardService.createBoard(user.getId(),request)));
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<BoardListResponseDto>> getBoardListByUserId(
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
-        List<BoardListResponseDto> listResponseDto = boardService.getBoardListByUserId(userDetails.getUser());
 
-        return ResponseEntity.ok().body(listResponseDto);
+    // Board page 조회
+    @GetMapping
+    public ResponseEntity<SuccessResponse<Page<BoardResponse>>> getBoards(
+            @RequestParam(required = false) String name,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "1") int pageNumber
+    ) {
+        return ResponseEntity.ok(SuccessResponse.of(boardService.getBoards(name,pageSize,pageNumber)));
     }
 
-    @GetMapping("{boardId}")
-    public ResponseEntity<BoardResponseDto> getBoardByBoardId(
-            @PathVariable Long boardId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
-        BoardResponseDto responseDto = boardService.getBoardByBoardId(boardId, userDetails.getUser());
-        return ResponseEntity.ok().body(responseDto);
+
+    // Board 단건 조회
+    @GetMapping("/{boardId}")
+    public ResponseEntity<SuccessResponse<BoardDetailResponse>> getBoard(@PathVariable Long boardId) {
+        return ResponseEntity.ok(SuccessResponse.of(boardService.getBoard(boardId)));
     }
 
-    @PutMapping("{boardId}")
-    public ResponseEntity<String> updateBoard(
-            @PathVariable Long boardId,
-            @Valid @RequestBody BoardUpdateRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
-        Long updatedBoardId = boardService.updateBoard(boardId, requestDto, userDetails.getUser());
 
-        return ResponseEntity.created(URI.create("api/boards/" + updatedBoardId))
-                .body("보드가 수정되었습니다.");
+    // Board 수정
+    @PutMapping("/{boardId}")
+    public ResponseEntity<SuccessResponse<BoardUpdateResponse>> updateBoard(@PathVariable Long boardId, @RequestBody BoardUpdateRequest request) {
+        return ResponseEntity.ok(SuccessResponse.of(boardService.updateBoard(boardId, request)));
     }
 
-    @DeleteMapping("{boardId}")
-    public ResponseEntity<String> deleteBoard(
-            @PathVariable Long boardId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
+    // Board 삭제
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<SuccessResponse<Void>> deleteBoard(@PathVariable Long boardId
     ) {
-        boardService.deleteBoard(boardId, userDetails.getUser());
 
-        return ResponseEntity.ok().body("성공적으로 보드 삭제가 되었습니다.");
-    }
-
-    @PatchMapping("{boardId}/invite")
-    public ResponseEntity<String> inviteUserToBoard(
-            @PathVariable Long boardId,
-            @RequestBody InviteRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ) {
-        boardService.inviteUserToBoard(boardId, requestDto.getUserId(), userDetails.getUser());
-
-        return ResponseEntity.ok().body("초대가 성공적으로 되었습니다.");
-
+        boardService.deleteBoard(boardId);
+        return ResponseEntity.ok(SuccessResponse.of(null));
     }
 }
