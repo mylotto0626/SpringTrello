@@ -1,4 +1,4 @@
-package com.sparta.springtrello.domain.user.UserRole;
+package com.sparta.springtrello.domain.user.authority;
 
 public enum MemberRole {
     READ_ONLY,

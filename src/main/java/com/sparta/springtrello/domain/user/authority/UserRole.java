@@ -1,4 +1,4 @@
-package com.sparta.springtrello.domain.user.UserRole;
+package com.sparta.springtrello.domain.user.authority;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

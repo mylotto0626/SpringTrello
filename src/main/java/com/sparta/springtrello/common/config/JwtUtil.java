@@ -2,7 +2,7 @@ package com.sparta.springtrello.common.config;
 
 import com.sparta.springtrello.common.exception.NotFoundException;
 import com.sparta.springtrello.common.exception.ResponseCode;
-import com.sparta.springtrello.domain.user.UserRole.UserRole;
+import com.sparta.springtrello.domain.user.authority.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -4,7 +4,7 @@ import com.sparta.springtrello.common.config.JwtUtil;
 import com.sparta.springtrello.common.config.PasswordEncoder;
 import com.sparta.springtrello.common.dto.AuthUser;
 import com.sparta.springtrello.common.exception.*;
-import com.sparta.springtrello.domain.user.UserRole.UserRole;
+import com.sparta.springtrello.domain.user.authority.UserRole;
 import com.sparta.springtrello.domain.user.dto.request.*;
 import com.sparta.springtrello.domain.user.dto.response.GetProfileResponseDto;
 import com.sparta.springtrello.domain.user.repository.UserRepository;
@@ -39,7 +39,7 @@ public class UserService {
 
         UserRole userRole = UserRole.of(postUserSignUpRequestDto.getUserRole());
 
-        User user = new User(postUserSignUpRequestDto,userRole, pw);
+        User user = new User(postUserSignUpRequestDto, userRole, pw);
         userRepository.save(user);
     }
 

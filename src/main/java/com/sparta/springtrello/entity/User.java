@@ -1,8 +1,7 @@
 package com.sparta.springtrello.entity;
 
-import com.sparta.springtrello.common.enums.Authority;
-import com.sparta.springtrello.domain.user.UserRole.MemberRole;
-import com.sparta.springtrello.domain.user.UserRole.UserRole;
+import com.sparta.springtrello.domain.user.authority.MemberRole;
+import com.sparta.springtrello.domain.user.authority.UserRole;
 import com.sparta.springtrello.domain.user.dto.request.PatchUserRequestDto;
 import com.sparta.springtrello.domain.user.dto.request.PostUserSignUpRequestDto;
 import jakarta.persistence.*;
