@@ -1,6 +1,5 @@
 package com.sparta.springtrello.common.config;
 
-import com.sparta.springtrello.domain.user.UserRole.UserRole;
 import com.sparta.springtrello.domain.user.authority.Authority;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

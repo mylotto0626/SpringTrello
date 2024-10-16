@@ -36,7 +36,7 @@ public class BoardService {
     public BoardResponse createBoard(Long userId, BoardCreateDto boardCreateDto) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new NotFoundException(NOT_FOUND_USER)).getUser();
+                new NotFoundException(NOT_FOUND_USER));
 
         Board newBoard = Board.from(user, boardCreateDto);
         Board savedStore = boardRepository.save(newBoard);

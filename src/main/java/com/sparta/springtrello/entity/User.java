@@ -38,7 +38,7 @@ public class User extends Timestamped {
     private MemberAuthority memberAuthority;
 
     private String refreshToken;
-    private String nickName;
+
 
     @OneToMany(mappedBy = "user")
     private List<Board> boards = new ArrayList<>();
