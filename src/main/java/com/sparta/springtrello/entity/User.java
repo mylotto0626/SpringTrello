@@ -1,6 +1,7 @@
 package com.sparta.springtrello.entity;
 
 import com.sparta.springtrello.common.enums.Authority;
+import com.sparta.springtrello.domain.user.UserRole.MemberRole;
 import com.sparta.springtrello.domain.user.UserRole.UserRole;
 import com.sparta.springtrello.domain.user.dto.request.PatchUserRequestDto;
 import com.sparta.springtrello.domain.user.dto.request.PostUserSignUpRequestDto;
@@ -29,6 +30,9 @@ public class User extends Timestamped {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
     // 탈퇴여부
     @Column(nullable = false)
     private boolean status;
@@ -36,9 +40,10 @@ public class User extends Timestamped {
 
     public User(PostUserSignUpRequestDto requestDto,UserRole userRole, String pw) {
         this.email = requestDto.getEmail();
-        this.nickName = requestDto.getName();
+        this.nickName = requestDto.getNickName();
         this.pw = pw;
         this.userRole = userRole;
+        this.memberRole = MemberRole.WORKSPACE;
         this.status = true;
     }
 

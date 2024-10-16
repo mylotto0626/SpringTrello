@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable) // BasicAuthenticationFilter 비활성화
                 .logout(AbstractHttpConfigurer::disable) // LogoutFilter 비활성화
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/signin", "/auth/signup").permitAll()
+                        .requestMatchers("/users/signin", "/users/signup").permitAll()
                         .requestMatchers("/test").hasAuthority(UserRole.Authority.USER)
                         .anyRequest().authenticated() // 그 외의 API는 JWT가 있어야해요!
                 )

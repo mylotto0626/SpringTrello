@@ -2,16 +2,25 @@
 package com.sparta.springtrello.domain.user.dto.request;
 
 import com.sparta.springtrello.common.enums.Authority;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class PostUserSignUpRequestDto {
-    private String email;
-    private String name;
-    private String pw;
-    private String userRole;
 
+    @NotBlank
+    @Email
+    private String email;
+    @NotBlank
+    private String pw;
+    @NotBlank
+    private String userRole;
+    @NotBlank
+    private String nickName;
 }

@@ -17,10 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder encode;
     private final JwtUtil jwtUtil;
 
+    @Transactional
     //회원가입 signUp
     public void signUpUser(PostUserSignUpRequestDto postUserSignUpRequestDto) {
         // 이메일 중복 확인
