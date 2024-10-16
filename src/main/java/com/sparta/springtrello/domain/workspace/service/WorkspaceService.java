@@ -9,7 +9,7 @@ import com.sparta.springtrello.domain.workspace.dto.request.CreateWorkspaceReque
 import com.sparta.springtrello.domain.workspace.dto.request.InviteMemberRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.request.UpdateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.response.WorkspaceResponseDto;
-import com.sparta.springtrello.domain.workspace.entity.Workspace;
+import com.sparta.springtrello.entity.Workspace;
 import com.sparta.springtrello.domain.workspace.repository.WorkspaceRepository;
 import com.sparta.springtrello.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +55,7 @@ public class WorkspaceService {
         Workspace workspace = workspaceRepository.findByIdOrElseThrow(id);
 
         // 멤버 초대 권한 확인 ( ADMIN OR WORKSPACE )
-        if(authuser.getAuthorities().contains(Authority.ROLE_ADMIN) && authuser.getAuthorities()
+        if(!authuser.getAuthorities().contains(Authority.ROLE_ADMIN) && !authuser.getAuthorities()
                                     .contains(MemberAuthority.WORKSPACE)){
             throw new AccessDeniedException(ResponseCode.INVALID_USER_AUTHORITY.getMessage());
         }
