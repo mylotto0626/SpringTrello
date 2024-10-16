@@ -1,16 +1,18 @@
 package com.sparta.springtrello.common.config;
 
+import com.sparta.springtrello.common.exception.NotFoundException;
+import com.sparta.springtrello.common.exception.ResponseCode;
+import com.sparta.springtrello.domain.user.UserRole.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.example.expert.domain.common.exception.ServerException;
-import org.example.expert.domain.user.enums.UserRole;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
 
 import java.security.Key;
 import java.util.Base64;
@@ -34,7 +36,7 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(Long userId, String email, UserRole userRole,String nickName) {
+    public String createToken(Long userId, String email, UserRole userRole, String nickName) {
         Date date = new Date();
 
         return BEARER_PREFIX +
@@ -53,7 +55,7 @@ public class JwtUtil {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
-        throw new ServerException("Not Found Token");
+        throw new NotFoundException(ResponseCode.INVALID_JWT_TOKEN);
     }
 
     public Claims extractClaims(String token) {

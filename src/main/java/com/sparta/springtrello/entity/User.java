@@ -1,6 +1,7 @@
 package com.sparta.springtrello.entity;
 
 import com.sparta.springtrello.common.enums.Authority;
+import com.sparta.springtrello.domain.user.UserRole.UserRole;
 import com.sparta.springtrello.domain.user.dto.request.PatchUserRequestDto;
 import com.sparta.springtrello.domain.user.dto.request.PostUserSignUpRequestDto;
 import jakarta.persistence.*;
@@ -26,18 +27,18 @@ public class User extends Timestamped {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Authority authority;
+    private UserRole userRole;
 
     // 탈퇴여부
     @Column(nullable = false)
     private boolean status;
 
 
-    public User(PostUserSignUpRequestDto requestDto, String pw) {
+    public User(PostUserSignUpRequestDto requestDto,UserRole userRole, String pw) {
         this.email = requestDto.getEmail();
         this.nickName = requestDto.getName();
         this.pw = pw;
-        this.authority = requestDto.getAuthority();
+        this.userRole = userRole;
         this.status = true;
     }
 
@@ -46,7 +47,7 @@ public class User extends Timestamped {
     }
 
     public void update(String pw, PatchUserRequestDto requestDto) {
-        this.authority = requestDto.getAuthority() != null ? requestDto.getAuthority() : this.authority;
+        this.userRole = requestDto.getUserRole() != null ? requestDto.getUserRole() : this.userRole;
         this.pw = requestDto.getPw() != null ? pw : this.pw;
     }
 }
