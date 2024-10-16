@@ -1,7 +1,6 @@
 
 package com.sparta.springtrello.domain.user.dto.request;
 
-import com.sparta.springtrello.common.enums.Authority;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

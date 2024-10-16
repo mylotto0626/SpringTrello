@@ -1,17 +1,22 @@
 package com.sparta.springtrello.entity;
 
-import com.sparta.springtrello.domain.user.authority.MemberRole;
-import com.sparta.springtrello.domain.user.authority.UserRole;
+import com.sparta.springtrello.domain.card.entity.Card;
+import com.sparta.springtrello.domain.user.authority.Authority;
+import com.sparta.springtrello.domain.user.authority.MemberAuthority;
 import com.sparta.springtrello.domain.user.dto.request.PatchUserRequestDto;
 import com.sparta.springtrello.domain.user.dto.request.PostUserSignUpRequestDto;
 import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "user")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends Timestamped {
 
     @Id
@@ -27,22 +32,29 @@ public class User extends Timestamped {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    private Authority authority;
 
-    @Column
     @Enumerated(EnumType.STRING)
-    private MemberRole memberRole;
+    private MemberAuthority memberAuthority;
+
+    private String refreshToken;
+    private String nickName;
+
+    @OneToMany(mappedBy = "user")
+    private List<Board> boards = new ArrayList<>();
     // 탈퇴여부
     @Column(nullable = false)
     private boolean status;
 
+    @OneToMany(mappedBy = "user")
+    private List<Card> cards = new ArrayList<>();
 
-    public User(PostUserSignUpRequestDto requestDto,UserRole userRole, String pw) {
+    public User(PostUserSignUpRequestDto requestDto,Authority authority, String pw) {
         this.email = requestDto.getEmail();
         this.nickName = requestDto.getNickName();
         this.pw = pw;
-        this.userRole = userRole;
-        this.memberRole = MemberRole.WORKSPACE;
+        this.authority = authority;
+        this.memberAuthority = MemberAuthority.WORKSPACE;
         this.status = true;
     }
 
@@ -51,7 +63,7 @@ public class User extends Timestamped {
     }
 
     public void update(String pw, PatchUserRequestDto requestDto) {
-        this.userRole = requestDto.getUserRole() != null ? requestDto.getUserRole() : this.userRole;
+        this.authority = requestDto.getAuthority() != null ? requestDto.getAuthority() : this.authority;
         this.pw = requestDto.getPw() != null ? pw : this.pw;
     }
 }

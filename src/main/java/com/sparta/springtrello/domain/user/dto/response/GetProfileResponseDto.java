@@ -1,6 +1,5 @@
 package com.sparta.springtrello.domain.user.dto.response;
 
-import com.sparta.springtrello.common.enums.Authority;
 import com.sparta.springtrello.domain.user.UserRole.UserRole;
 import com.sparta.springtrello.entity.User;
 import lombok.Getter;

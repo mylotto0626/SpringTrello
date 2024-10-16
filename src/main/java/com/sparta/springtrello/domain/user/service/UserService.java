@@ -4,7 +4,7 @@ import com.sparta.springtrello.common.config.JwtUtil;
 import com.sparta.springtrello.common.config.PasswordEncoder;
 import com.sparta.springtrello.common.dto.AuthUser;
 import com.sparta.springtrello.common.exception.*;
-import com.sparta.springtrello.domain.user.authority.UserRole;
+import com.sparta.springtrello.domain.user.authority.Authority;
 import com.sparta.springtrello.domain.user.dto.request.*;
 import com.sparta.springtrello.domain.user.dto.response.GetProfileResponseDto;
 import com.sparta.springtrello.domain.user.repository.UserRepository;
@@ -37,9 +37,9 @@ public class UserService {
         // 비밀번호 암호화
         String pw = encode.encode(postUserSignUpRequestDto.getPw());
 
-        UserRole userRole = UserRole.of(postUserSignUpRequestDto.getUserRole());
+        Authority authority = Authority.of(postUserSignUpRequestDto.getUserRole());
 
-        User user = new User(postUserSignUpRequestDto, userRole, pw);
+        User user = new User(postUserSignUpRequestDto,authority,pw);
         userRepository.save(user);
     }
 
@@ -53,7 +53,7 @@ public class UserService {
 
         checkStatus(user);
 
-        return jwtUtil.createToken(user.getId(), user.getEmail(),user.getUserRole(),user.getNickName());
+        return jwtUtil.createToken(user.getId(), user.getEmail(),user.getAuthority(),user.getNickName());
     }
 
     //회원 탈퇴

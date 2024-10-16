@@ -1,6 +1,7 @@
 package com.sparta.springtrello.common.config;
 
 import com.sparta.springtrello.domain.user.UserRole.UserRole;
+import com.sparta.springtrello.domain.user.authority.Authority;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +35,7 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable) // LogoutFilter 비활성화
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/users/signin", "/users/signup").permitAll()
-                        .requestMatchers("/test").hasAuthority(UserRole.Authority.USER)
+                        .requestMatchers("/test").hasAuthority(Authority.UserAuthority.USER)
                         .anyRequest().authenticated() // 그 외의 API는 JWT가 있어야해요!
                 )
                 .build();

@@ -1,6 +1,5 @@
 package com.sparta.springtrello.domain.user.repository;
 
-
 import com.sparta.springtrello.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
