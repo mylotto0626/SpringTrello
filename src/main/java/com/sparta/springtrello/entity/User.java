@@ -1,5 +1,6 @@
 package com.sparta.springtrello.entity;
 
+import com.sparta.springtrello.common.entity.Timestamped;
 import com.sparta.springtrello.domain.card.entity.Card;
 import com.sparta.springtrello.domain.user.authority.Authority;
 import com.sparta.springtrello.domain.user.authority.MemberAuthority;
@@ -21,6 +22,7 @@ public class User extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(name = "email", unique = true)
