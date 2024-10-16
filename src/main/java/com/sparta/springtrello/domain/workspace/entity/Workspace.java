@@ -21,16 +21,12 @@ public class Workspace extends Timestamped {
 
     private String description;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "user_role")
-//    private UserRole userRole;
-
 //    @OneToMany(mappedBy = "workspace", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<BOard> boards = new ArrayList<>();
+//    private List<Board> boards = new ArrayList<>();
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @OneToMany
+    @JoinColumn(name = "workspace_id")
+    private List<User> members = new ArrayList<>();
 
     public Workspace(String name, String description) {
         this.name = name;

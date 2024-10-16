@@ -1,11 +1,9 @@
 package com.sparta.springtrello.domain.workspace.service;
 
 import com.sparta.springtrello.common.exception.ResponseCode;
-import com.sparta.springtrello.common.exception.UnauthorizedException;
 import com.sparta.springtrello.domain.workspace.dto.request.CreateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.request.InviteMemberRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.request.UpdateWorkspaceRequestDto;
-import com.sparta.springtrello.domain.workspace.dto.request.updateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springtrello.domain.workspace.entity.Workspace;
 import com.sparta.springtrello.domain.workspace.repository.WorkspaceRepository;
@@ -43,32 +41,30 @@ public class WorkspaceService {
         workspaceRepository.save(workspace);
     }
 
-//    @Transactional
-//    public void inviteMember(Authuser authuser, long id, InviteMemberRequestDto inviteMemberRequestDto) {
-//        // 이메일 조회
-//        User user = userRepository.findByEmail(inviteMemberRequestDto.getEmail()).orElseThrow(
-//                () -> new NoSuchElementException(ResponseCode.INVALID_EMAIL.getMessage()));
-//
-//        Workspace workspace = workspaceRepository.findByIdOrElseThrow(id);
-//
-//        if(authuser.getUserRole() != UserRole.ADMIN && authuser.getMemberRole() != MemberRole.WORKSPACE){
-//            throw new AccessDeniedException(ResponseCode.INVALID_USER_AUTHORITY.getMessage());
-//        }
-//
-//        Nworkspace nworkspace = Nworkspace(workspace,)
-//
-//        workspaceRepository.save(workspace);
-//    }
-//
-//    public List<WorkspaceResponseDto> getWorkspace(Long userid) {
-//        List<Workspace> workspace = userRepository.findById(userid);
-//
-//        return workspace.stream()
-//                .map(workspace-> new WorkspaceResponseDto(workspace.getId(), workspace.getName(),
-//                                                           workspace.getDescription()))
-//                .collect(Collectors.toList());
-//
-//    }
+    @Transactional
+    public void inviteMember(Authuser authuser, long id, InviteMemberRequestDto inviteMemberRequestDto) {
+        // 회원 가입한 이메일 대조
+        User user = userRepository.findByEmail(inviteMemberRequestDto.getEmail()).orElseThrow(
+                () -> new NoSuchElementException(ResponseCode.INVALID_EMAIL.getMessage()));
+
+        Workspace workspace = workspaceRepository.findByIdOrElseThrow(id);
+
+        // 멤버 초대 권한 확인 ( ADMIN OR WORKSPACE )
+        if(authuser.getUserRole() != UserRole.ADMIN && authuser.getMemberRole() != MemberRole.WORKSPACE){
+            throw new AccessDeniedException(ResponseCode.INVALID_USER_AUTHORITY.getMessage());
+        }
+
+        workspace.getMembers().add(user);
+        workspaceRepository.save(workspace);
+    }
+
+    public List<WorkspaceResponseDto> getWorkspace(long userId) {
+        List<Workspace> workspaces = workspaceRepository.findByMembersId(userId);
+
+        return workspaces.stream().map(workspace -> new WorkspaceResponseDto(workspace.getId()
+                ,workspace.getName(),workspace.getDescription(),workspace.getCreatedAt()))
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public void updateWorkspace(AuthUser authUser, long id, UpdateWorkspaceRequestDto updateWorkspaceRequestDto) {
