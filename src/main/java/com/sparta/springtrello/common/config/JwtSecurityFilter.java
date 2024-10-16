@@ -1,7 +1,7 @@
 package com.sparta.springtrello.common.config;
 
 import com.sparta.springtrello.common.dto.AuthUser;
-import com.sparta.springtrello.domain.user.UserRole.UserRole;
+import com.sparta.springtrello.domain.user.authority.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -45,7 +45,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
                 Long userId = Long.valueOf(claims.getSubject());
                 String email = claims.get("email", String.class);
                 String nickname = claims.get("nickname", String.class);
-                UserRole userRole = UserRole.of(claims.get("userRole", String.class));
+                Authority userRole = Authority.of(claims.get("userRole", String.class));
 
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
                     AuthUser authUser = new AuthUser(userId, email , nickname, userRole);

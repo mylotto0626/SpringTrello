@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class updateWorkspaceRequestDto {
+public class UpdateWorkspaceRequestDto {
 
     private String name;
     private String description;
