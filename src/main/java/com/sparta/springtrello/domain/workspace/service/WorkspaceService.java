@@ -1,12 +1,17 @@
 package com.sparta.springtrello.domain.workspace.service;
 
+import com.sparta.springtrello.common.dto.AuthUser;
 import com.sparta.springtrello.common.exception.ResponseCode;
+import com.sparta.springtrello.domain.user.authority.Authority;
+import com.sparta.springtrello.domain.user.authority.MemberAuthority;
+import com.sparta.springtrello.domain.user.repository.UserRepository;
 import com.sparta.springtrello.domain.workspace.dto.request.CreateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.request.InviteMemberRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.request.UpdateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springtrello.domain.workspace.entity.Workspace;
 import com.sparta.springtrello.domain.workspace.repository.WorkspaceRepository;
+import com.sparta.springtrello.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -22,16 +27,16 @@ import java.util.stream.Collectors;
 public class WorkspaceService {
 
     private final WorkspaceRepository workspaceRepository;
-//    private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void createWorkspace(AuthUser authUser, CreateWorkspaceRequestDto createWorkspaceRequestDto) {
 
-//        User user = userRepository.findById(authUser.getUserId()).orElseThrow(
-//                () -> new NoSuchElementException(ResponseCode.NOT_FOUND_USER.getMessage()));
+        User user = userRepository.findById(authUser.getId()).orElseThrow(
+                () -> new NoSuchElementException(ResponseCode.NOT_FOUND_USER.getMessage()));
 
         // ADMIN 검증
-        if(authUser.getUserRole() != UserRole.ADMIN){
+        if(!authUser.getAuthorities().contains(Authority.ROLE_ADMIN)){
             throw new AccessDeniedException(ResponseCode.INVALID_USER_AUTHORITY.getMessage());
         }
 
@@ -42,7 +47,7 @@ public class WorkspaceService {
     }
 
     @Transactional
-    public void inviteMember(Authuser authuser, long id, InviteMemberRequestDto inviteMemberRequestDto) {
+    public void inviteMember(AuthUser authuser, long id, InviteMemberRequestDto inviteMemberRequestDto) {
         // 회원 가입한 이메일 대조
         User user = userRepository.findByEmail(inviteMemberRequestDto.getEmail()).orElseThrow(
                 () -> new NoSuchElementException(ResponseCode.INVALID_EMAIL.getMessage()));
@@ -50,7 +55,8 @@ public class WorkspaceService {
         Workspace workspace = workspaceRepository.findByIdOrElseThrow(id);
 
         // 멤버 초대 권한 확인 ( ADMIN OR WORKSPACE )
-        if(authuser.getUserRole() != UserRole.ADMIN && authuser.getMemberRole() != MemberRole.WORKSPACE){
+        if(authuser.getAuthorities().contains(Authority.ROLE_ADMIN) && authuser.getAuthorities()
+                                    .contains(MemberAuthority.WORKSPACE)){
             throw new AccessDeniedException(ResponseCode.INVALID_USER_AUTHORITY.getMessage());
         }
 
@@ -70,7 +76,7 @@ public class WorkspaceService {
     public void updateWorkspace(AuthUser authUser, long id, UpdateWorkspaceRequestDto updateWorkspaceRequestDto) {
         Workspace workspace = workspaceRepository.findByIdOrElseThrow(id);
 
-        if(!authUser.getMemberRole().equals(MemberRole.WORKSPACE)){
+        if(!authUser.getAuthorities().equals(MemberAuthority.WORKSPACE)){
             throw new AccessDeniedException(ResponseCode.INVALID_USER_AUTHORITY.getMessage());
         }
 
@@ -81,7 +87,7 @@ public class WorkspaceService {
     public void deleteWorkspace(AuthUser authUser, Long id) {
         Workspace workspace = workspaceRepository.findByIdOrElseThrow(id);
 
-        if(!authUser.getMemberRole().equals(MemberRole.WORKSPACE)){
+        if(!authUser.getAuthorities().equals(MemberAuthority.WORKSPACE)){
             throw new AccessDeniedException(ResponseCode.INVALID_USER_AUTHORITY.getMessage());
         }
 

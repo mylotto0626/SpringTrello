@@ -12,6 +12,6 @@ public class InviteMemberRequestDto {
 
     @Email
     private String email;
-//    private UserRole role;
+    private
 }
 
