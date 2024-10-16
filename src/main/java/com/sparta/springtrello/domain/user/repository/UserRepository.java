@@ -1,7 +1,15 @@
 package com.sparta.springtrello.domain.user.repository;
 
-import com.sparta.springtrello.entity.Board;
+import com.sparta.springtrello.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<Board, Long> {
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    boolean existsByEmail(String email);
+
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findByIdAndStatusTrue(Long userId);
+
 }
