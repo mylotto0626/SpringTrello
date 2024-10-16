@@ -30,6 +30,5 @@ public enum ResponseCode {
 
     // 보드
     NOT_FOUND_BOARD("해당 보드는 존재하지 않습니다");
-
     private final String message;
 }
