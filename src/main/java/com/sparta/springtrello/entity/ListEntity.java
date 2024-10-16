@@ -1,9 +1,10 @@
 package com.sparta.springtrello.entity;
 
+import com.sparta.springtrello.domain.list.dto.request.ListCreateDto;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "list")
@@ -18,8 +19,8 @@ public class ListEntity {
 
     private String title;
     private int listOrder;
-    private Date createdAt;
-    private Date modifiedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -27,12 +28,21 @@ public class ListEntity {
 
 
     @Builder
-    public ListEntity(String title, int listOrder, Date createdAt, Date modifiedAt, Board board) {
+    public ListEntity(User user, String title, int listOrder, LocalDateTime createdAt, LocalDateTime modifiedAt) {
         this.title = title;
         this.listOrder = listOrder;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
-        this.board = board;
+    }
+
+    public static ListEntity from(User user, ListCreateDto listCreateDto) {
+        return new ListEntity(
+                user,
+                listCreateDto.getTitle(),
+                listCreateDto.getListOrder(),
+                listCreateDto.getCreatedAt(),
+                listCreateDto.getModifiedAt()
+        );
     }
 }
 

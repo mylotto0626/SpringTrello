@@ -5,7 +5,6 @@ import com.sparta.springtrello.common.exception.UnauthorizedException;
 import com.sparta.springtrello.domain.board.dto.request.BoardCreateDto;
 import com.sparta.springtrello.domain.board.dto.request.BoardUpdateRequest;
 import com.sparta.springtrello.domain.board.dto.response.BoardResponse;
-import com.sparta.springtrello.domain.board.dto.response.BoardUpdateResponse;
 import com.sparta.springtrello.domain.board.repository.BoardRepository;
 import com.sparta.springtrello.domain.user.repository.UserRepository;
 import com.sparta.springtrello.entity.Board;
@@ -39,21 +38,14 @@ public class BoardService {
                 new NotFoundException(NOT_FOUND_USER)).getUser();
 
         Board newBoard = Board.from(user, boardCreateDto);
-        Board savedStore = boardRepository.save(newBoard);
+        Board savedBoard = boardRepository.save(newBoard);
 
-        return BoardResponse.from(savedStore);
+        return BoardResponse.from(savedBoard);
+
     }
-
-
-    public Board getBoard(Long boardId) {
-        return boardRepository.findById(boardId).orElseThrow(() ->
-                new NotFoundException(NOT_FOUND_BOARD));
-    }
-
-
+    // 보드 목록 조회 (페이징)
     public Page<BoardResponse> getBoards(String name, int pageSize, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
-
         Page<Board> boards;
 
         if (name == null || name.isEmpty()) {
@@ -62,13 +54,16 @@ public class BoardService {
             boards = boardRepository.findByNameContainingAndDeletedAtIsNull(name, pageable);
         }
 
-        return boards.map(store -> {
-            return BoardResponse.from(store);
-        });
-
+        return boards.map(BoardResponse::from);
     }
 
+    // 보드 단건 조회
+    public Board getBoard(Long boardId) {
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_BOARD));
+    }
 
+    // 보드 수정
     public Board updateBoard(Long boardId, BoardUpdateRequest request) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_BOARD));
@@ -76,15 +71,13 @@ public class BoardService {
         board.setName(request.getName());
         board.setModifiedAt(LocalDateTime.now());
 
-        return boardRepository.save(board);
+        return  boardRepository.save(board);
     }
 
-    public void deleteBoard(Long boardId, String username) {
+    // 보드 삭제
+    public void deleteBoard(Long boardId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_BOARD));
-        if (!board.getUser().getNickName().equals(username)) {
-            throw new UnauthorizedException(INVALID_USER_AUTHORITY);
-        }
         boardRepository.delete(board);
     }
 }

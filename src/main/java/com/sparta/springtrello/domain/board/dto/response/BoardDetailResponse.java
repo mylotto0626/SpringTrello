@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardDetailResponse {
+    private Long boardId;
     private String name;
 
     public static BoardDetailResponse from(Board board){
         return new BoardDetailResponse(
-                store.getName()
+                board.getId(),
+                board.getName()
         );
     }
 }

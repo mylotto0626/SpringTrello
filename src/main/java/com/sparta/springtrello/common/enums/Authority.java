@@ -10,7 +10,8 @@ import static com.sparta.springtrello.common.exception.ResponseCode.INVALID_USER
 @RequiredArgsConstructor
 public enum Authority {
     USER("유저"),  // 사용자 권한
-    ADMIN("관리자");  // 관리자 권한
+    ADMIN("관리자"),  // 관리자 권한
+    READ_ONLY("읽기 전용");
 
     private final String authority;
 

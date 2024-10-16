@@ -1,5 +1,6 @@
 package com.sparta.springtrello.common.response;
 
+import com.sparta.springtrello.domain.board.dto.response.BoardUpdateResponse;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import com.sparta.springtrello.common.exception.ResponseCode;

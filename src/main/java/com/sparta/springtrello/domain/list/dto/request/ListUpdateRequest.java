@@ -1,4 +1,4 @@
-package com.sparta.springtrello.domain.board.dto.request;
+package com.sparta.springtrello.domain.list.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardUpdateRequest {
-    private String name;
+public class ListUpdateRequest {
+    private String title;
     private LocalDateTime modifiedAt;
 }
