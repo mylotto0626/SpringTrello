@@ -45,11 +45,4 @@ public class UserController {
         userService.deleteUser(authUser,deleteUserRequestDto);
         return ResponseEntity.ok(new ResponseDto<>(HttpStatus.OK.value() , null , "회원 탈퇴하였습니다."));
     }
-//
-//    //회원정보 수정
-//    @PatchMapping("/update")
-//    public ResponseEntity<ResponseDto<String>> updateUser(@Auth AuthUser authUser,@Valid @RequestBody PatchUserRequestDto patchUserRequestDto) {
-//        userService.updateUser(authUser,patchUserRequestDto);
-//        return ResponseEntity.ok(new ResponseDto<>(HttpStatus.OK.value(),null,"수정이 완료 되었습니다."));
-//    }
 }
