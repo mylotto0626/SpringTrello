@@ -10,7 +10,9 @@ import java.util.Arrays;
 public enum Authority {
 
     ROLE_USER(Authority.UserAuthority.USER),
-    ROLE_ADMIN(Authority.UserAuthority.ADMIN);
+    ROLE_ADMIN(Authority.UserAuthority.ADMIN),
+    ROLE_READ(Authority.UserAuthority.READ);
+
     private final String authority;
 
     public static com.sparta.springtrello.domain.user.authority.Authority of(String role) {
@@ -22,5 +24,6 @@ public enum Authority {
     public static class UserAuthority {
         public static final String USER = "ROLE_USER";
         public static final String ADMIN = "ROLE_ADMIN";
+        public static final String READ = "ROLE_READ";
     }
 }
