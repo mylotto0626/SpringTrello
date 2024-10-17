@@ -1,7 +1,7 @@
 package com.sparta.springtrello.domain.workspace.repository;
 
 import com.sparta.springtrello.common.exception.ResponseCode;
-import com.sparta.springtrello.domain.workspace.entity.Workspace;
+import com.sparta.springtrello.entity.Workspace;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

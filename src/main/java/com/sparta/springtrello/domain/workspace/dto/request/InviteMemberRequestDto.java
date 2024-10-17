@@ -1,5 +1,6 @@
 package com.sparta.springtrello.domain.workspace.dto.request;
 
+import com.sparta.springtrello.domain.user.authority.Authority;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +13,7 @@ public class InviteMemberRequestDto {
 
     @Email
     private String email;
-//    private UserRole role;
+    private String role;
+
 }
 

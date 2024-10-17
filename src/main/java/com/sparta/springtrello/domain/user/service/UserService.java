@@ -49,7 +49,7 @@ public class UserService {
 
         User user = userRepository.findByEmail(postUserSignUpRequestDto.getEmail()).orElseThrow(()-> new NotFoundException(ResponseCode.NOT_FOUND_USER));
         //정적 펙토리 메소드를 사용하여 user를 찾아온다 // stateless 무상태 서버가 상태를 가지지 않는다.
-        checkPw(postUserSignUpRequestDto.getPw(), user.getPw(), user.getId());
+        checkPw(postUserSignUpRequestDto.getPw(), user.getPw());
 
         checkStatus(user);
 
@@ -58,30 +58,21 @@ public class UserService {
 
     //회원 탈퇴
     @Transactional
-    public void deleteUser(AuthUser authUser, DeleteUserRequestDto deleteReqestDto) {
+    public void deleteUser(AuthUser authUser, DeleteUserRequestDto deleteRequestDto) {
         Long id = authUser.getId();
         User user = findUser(id);
         //비밀번호 체크
-        String pw= deleteReqestDto.getPw();
-        checkPw(pw, user.getPw(), user.getId());
+        String pw= deleteRequestDto.getPw();
+        checkPw(pw, user.getPw());
         //유저 비활성화 코드
         user.delete();
     }
 
     //pw가 틀렸을때 예외처리
-    @Transactional
-    public void checkPw(String userPw, String enPw,Long userId) {
-        User user = findUser(userId);
+    public void checkPw(String userPw, String enPw) {
         if (!encode.matches(userPw, enPw)) {
             throw new InvalidParameterException(ResponseCode.INVALID_PASSWORD);
         }
-    }
-
-    //회원조회
-    public GetProfileResponseDto getProfile(AuthUser authUser) {
-        Long id = authUser.getId();
-        User user = findUser(id);
-        return new GetProfileResponseDto(user);
     }
 
     //id를 사용한 유저 찾기

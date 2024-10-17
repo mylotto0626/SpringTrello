@@ -1,8 +1,10 @@
 package com.sparta.springtrello.domain.workspace.controller;
 
+import com.sparta.springtrello.common.annotation.Auth;
+import com.sparta.springtrello.common.dto.AuthUser;
 import com.sparta.springtrello.domain.workspace.dto.request.CreateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.request.InviteMemberRequestDto;
-import com.sparta.springtrello.domain.workspace.dto.request.UpdateWorkspaceRequestDto;
+import com.sparta.springtrello.domain.workspace.dto.request.updateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springtrello.domain.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,7 @@ public class WorkspaceController {
 
     // 워크 스페이스 멤버 초대
     @PostMapping("/workspaces/{id}/invite")
-    public ResponseEntity<String> inviteMember(@Auth Authuser authUser,
+    public ResponseEntity<String> inviteMember(@Auth AuthUser authUser,
                                             @PathVariable long id,
                                             @RequestBody InviteMemberRequestDto inviteMemberRequestDto){
         workspaceService.inviteMember(authUser, id, inviteMemberRequestDto);
@@ -47,7 +49,7 @@ public class WorkspaceController {
     @PutMapping("/workspaces/{id}")
     public ResponseEntity<String> updateWorkspace(@Auth AuthUser authUser,
                                                   @PathVariable long id,
-                                                  @RequestBody UpdateWorkspaceRequestDto updateRequestDto){
+                                                  @RequestBody updateWorkspaceRequestDto updateRequestDto){
         workspaceService.updateWorkspace(authUser, id, updateRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body("수정 완료");
     }

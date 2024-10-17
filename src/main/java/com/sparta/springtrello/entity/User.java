@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "user")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class User extends Timestamped {
 
     @Id
@@ -46,8 +46,8 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private boolean status;
 
-    @OneToMany(mappedBy = "user")
-    private List<Card> cards = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")
+//    private List<Card> cards = new ArrayList<>();
 
     public User(PostUserSignUpRequestDto requestDto,Authority authority, String pw) {
         this.email = requestDto.getEmail();
@@ -62,7 +62,7 @@ public class User extends Timestamped {
         this.status = false;
     }
 
-    public void updateRole(Authority authority) {
-        this.authority = authority;
+    public void updateRole(MemberAuthority memberAuthority) {
+        this.memberAuthority = memberAuthority;
     }
 }

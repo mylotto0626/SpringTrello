@@ -1,6 +1,6 @@
-package com.sparta.springtrello.domain.workspace.entity;
+package com.sparta.springtrello.entity;
 
-import com.sparta.springtrello.common.timestamped.Timestamped;
+import com.sparta.springtrello.common.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +21,8 @@ public class Workspace extends Timestamped {
 
     private String description;
 
-//    @OneToMany(mappedBy = "workspace", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Board> boards = new ArrayList<>();
+    @OneToMany(mappedBy = "workspace", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Board> boards = new ArrayList<>();
 
     @OneToMany
     @JoinColumn(name = "workspace_id")
