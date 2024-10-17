@@ -18,6 +18,7 @@ public enum ResponseCode {
     // 사용자
     NOT_FOUND_USER("해당 사용자는 존재하지 않습니다."),
     NOT_FOUND_CARD("해당 카드는 존재하지 않습니다."),
+    NOT_FOUND_LIST("해당 카드는 존재하지 않습니다."),
     INVALID_USER_AUTHORITY("해당 사용자 권한은 유효하지 않습니다."),
 
     DUPLICATE_EMAIL("이미 존재하는 이메일입니다."),

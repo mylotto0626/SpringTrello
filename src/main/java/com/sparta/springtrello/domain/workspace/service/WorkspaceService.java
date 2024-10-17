@@ -7,7 +7,7 @@ import com.sparta.springtrello.domain.user.authority.MemberAuthority;
 import com.sparta.springtrello.domain.user.repository.UserRepository;
 import com.sparta.springtrello.domain.workspace.dto.request.CreateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.request.InviteMemberRequestDto;
-import com.sparta.springtrello.domain.workspace.dto.request.updateWorkspaceRequestDto;
+import com.sparta.springtrello.domain.workspace.dto.request.UpdateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springtrello.entity.Workspace;
 import com.sparta.springtrello.domain.workspace.repository.WorkspaceRepository;
@@ -30,7 +30,7 @@ public class WorkspaceService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createWorkspace(AuthUser authUser, CreateWorkspaceRequestDto createWorkspaceRequestDto) {
+    public Workspace createWorkspace(AuthUser authUser, CreateWorkspaceRequestDto createWorkspaceRequestDto) {
 
         User user = userRepository.findById(authUser.getId()).orElseThrow(
                 () -> new NoSuchElementException(ResponseCode.NOT_FOUND_USER.getMessage()));
@@ -43,11 +43,11 @@ public class WorkspaceService {
         Workspace workspace = new Workspace(createWorkspaceRequestDto.getName(),
                 createWorkspaceRequestDto.getDescription());
 
-        workspaceRepository.save(workspace);
+        return workspaceRepository.save(workspace);
     }
 
     @Transactional
-    public void inviteMember(AuthUser authuser, long id, InviteMemberRequestDto inviteMemberRequestDto) {
+    public Workspace inviteMember(AuthUser authuser, long id, InviteMemberRequestDto inviteMemberRequestDto) {
         // 회원 가입한 이메일 대조
         User user = userRepository.findByEmail(inviteMemberRequestDto.getEmail()).orElseThrow(
                 () -> new NoSuchElementException(ResponseCode.INVALID_EMAIL.getMessage()));
@@ -61,7 +61,7 @@ public class WorkspaceService {
         }
 
         workspace.getMembers().add(user);
-        workspaceRepository.save(workspace);
+       return workspaceRepository.save(workspace);
     }
 
     public List<WorkspaceResponseDto> getWorkspace(long userId) {
@@ -73,21 +73,22 @@ public class WorkspaceService {
     }
 
     @Transactional
-    public void updateWorkspace(AuthUser authUser, long id, updateWorkspaceRequestDto updateWorkspaceRequestDto) {
+    public Workspace updateWorkspace(AuthUser authUser, long id, UpdateWorkspaceRequestDto updateWorkspaceRequestDto) {
         Workspace workspace = workspaceRepository.findByIdOrElseThrow(id);
 
-        if(!authUser.getAuthorities().equals(MemberAuthority.WORKSPACE)){
+        if(!authUser.getAuthorities().contains(MemberAuthority.WORKSPACE)){
             throw new AccessDeniedException(ResponseCode.INVALID_USER_AUTHORITY.getMessage());
         }
 
         workspace.update(updateWorkspaceRequestDto.getName(), updateWorkspaceRequestDto.getDescription());
+        return workspace;
     }
 
     @Transactional
     public void deleteWorkspace(AuthUser authUser, Long id) {
         Workspace workspace = workspaceRepository.findByIdOrElseThrow(id);
 
-        if(!authUser.getAuthorities().equals(MemberAuthority.WORKSPACE)){
+        if(!authUser.getAuthorities().contains(MemberAuthority.WORKSPACE)){
             throw new AccessDeniedException(ResponseCode.INVALID_USER_AUTHORITY.getMessage());
         }
 
