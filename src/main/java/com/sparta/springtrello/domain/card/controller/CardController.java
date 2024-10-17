@@ -1,10 +1,12 @@
 package com.sparta.springtrello.domain.card.controller;
 
+import com.sparta.springtrello.common.dto.AuthUser;
 import com.sparta.springtrello.domain.card.dto.CardRequestDto;
 import com.sparta.springtrello.domain.card.dto.CardResponseDto;
 import com.sparta.springtrello.domain.card.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,8 +22,8 @@ public class CardController {
                                                       @PathVariable Long workspaceId,
                                                       @PathVariable Long boardId,
                                                       @PathVariable Long listId,
-                                                      @RequestParam Long userId) {
-        return ResponseEntity.ok(cardService.createCard(requestDto, userId, workspaceId, boardId, listId));
+                                                      @AuthenticationPrincipal AuthUser authUser) {
+        return ResponseEntity.ok(cardService.createCard(requestDto, authUser.getId(), workspaceId, boardId, listId));
     }
 
     // 카드 수정
@@ -31,8 +33,8 @@ public class CardController {
                                                       @PathVariable Long listId,
                                                       @PathVariable Long cardId,
                                                       @RequestBody CardRequestDto requestDto,
-                                                      @RequestParam Long userId) {
-        return ResponseEntity.ok(cardService.updateCard(requestDto, userId, workspaceId, boardId, listId, cardId));
+                                                      @AuthenticationPrincipal AuthUser authUser) {
+        return ResponseEntity.ok(cardService.updateCard(requestDto, authUser.getId(), workspaceId, boardId, listId, cardId));
     }
 
     // 카드 상세 정보 조회
@@ -41,8 +43,8 @@ public class CardController {
                                                          @PathVariable Long boardId,
                                                          @PathVariable Long listId,
                                                          @PathVariable Long cardId,
-                                                         @RequestParam Long userId) {
-        return ResponseEntity.ok(cardService.getCardDetail(userId, workspaceId, boardId, listId, cardId));
+                                                         @AuthenticationPrincipal AuthUser authUser) {
+        return ResponseEntity.ok(cardService.getCardDetail(authUser.getId(), workspaceId, boardId, listId, cardId));
     }
 
     // 카드 삭제
@@ -51,8 +53,8 @@ public class CardController {
                                              @PathVariable Long boardId,
                                              @PathVariable Long listId,
                                              @PathVariable Long cardId,
-                                             @RequestParam Long userId) {
-        cardService.deleteCard(userId, workspaceId, boardId, listId, cardId);
+                                             @AuthenticationPrincipal AuthUser authUser) {
+        cardService.deleteCard(authUser.getId(), workspaceId, boardId, listId, cardId);
         return ResponseEntity.ok("카드 삭제 완료");
     }
 }
