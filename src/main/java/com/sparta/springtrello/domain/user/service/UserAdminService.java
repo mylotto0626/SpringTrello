@@ -29,7 +29,7 @@ public class UserAdminService {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new InvalidRequestException("User not found"));
 
-        if(!authUser.getAuthorities().equals(Authority.of(userRoleChangeRequest.getMemberRole()))){
+        if(authUser.getAuthorities().equals(Authority.of("ROLE_ADMIN"))){
             throw new UnauthorizedException(ResponseCode.INVALID_USER_AUTHORITY);
         }
         user.updateRole(MemberAuthority.of(userRoleChangeRequest.getMemberRole()));
