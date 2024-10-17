@@ -2,12 +2,14 @@ package com.sparta.springtrello.domain.card.entity;
 
 import com.sparta.springtrello.common.entity.Timestamped;
 import com.sparta.springtrello.domain.card.dto.CardRequestDto;
+import com.sparta.springtrello.entity.ListEntity;
+import com.sparta.springtrello.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+
 
 @Entity
 @Table(name = "Card")
@@ -23,20 +25,20 @@ public class Card extends Timestamped {
     private String contents;
     private String dueDate;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "board_list_id")
-//    private List list;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "list_id")
+    private ListEntity list;
 
     @Builder
-    public Card(CardRequestDto requestDto, List list) {
+    public Card(CardRequestDto requestDto, ListEntity list) {
         this.title = title;
         this.contents = contents;
         this.dueDate = dueDate;
-        //this.list = list;
+        this.list = list;
     }
 
 
