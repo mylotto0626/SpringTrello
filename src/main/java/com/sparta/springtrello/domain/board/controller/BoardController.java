@@ -1,5 +1,7 @@
 package com.sparta.springtrello.domain.board.controller;
 
+import com.sparta.springtrello.common.annotation.Auth;
+import com.sparta.springtrello.common.dto.AuthUser;
 import com.sparta.springtrello.common.response.SuccessResponse;
 import com.sparta.springtrello.domain.board.dto.request.BoardCreateDto;
 import com.sparta.springtrello.domain.board.dto.request.BoardUpdateRequest;
@@ -7,7 +9,6 @@ import com.sparta.springtrello.domain.board.dto.response.BoardDetailResponse;
 import com.sparta.springtrello.domain.board.dto.response.BoardResponse;
 import com.sparta.springtrello.domain.board.dto.response.BoardUpdateResponse;
 import com.sparta.springtrello.domain.board.service.BoardService;
-import com.sparta.springtrello.entity.Board;
 import com.sparta.springtrello.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +23,13 @@ public class BoardController {
 
     private final BoardService boardService;
 
-
     // Board 생성
     @PostMapping
     public ResponseEntity<SuccessResponse<BoardResponse>> createBoard(
-            User user, @Valid @RequestBody BoardCreateDto request
+            @Auth AuthUser authUser, @Valid @RequestBody BoardCreateDto request
     ) {
-        return ResponseEntity.ok(SuccessResponse.of(boardService.createBoard(user.getId(),request)));
+        BoardResponse response = boardService.createBoard(authUser,request);
+        return ResponseEntity.ok(SuccessResponse.of(response));
     }
 
 
@@ -39,21 +40,24 @@ public class BoardController {
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam(defaultValue = "1") int pageNumber
     ) {
-        return ResponseEntity.ok(SuccessResponse.of(boardService.getBoards(name,pageSize,pageNumber)));
+        Page<BoardResponse> boards = boardService.getBoards(name, pageSize, pageNumber);
+        return ResponseEntity.ok(SuccessResponse.of(boards));
     }
 
 
     // Board 단건 조회
     @GetMapping("/{boardId}")
     public ResponseEntity<SuccessResponse<BoardDetailResponse>> getBoard(@PathVariable Long boardId) {
-        return ResponseEntity.ok(SuccessResponse.of(boardService.getBoard(boardId)));
+        BoardDetailResponse boardDetail = BoardDetailResponse.from(boardService.getBoard(boardId));
+        return ResponseEntity.ok(SuccessResponse.of(boardDetail));
     }
 
 
     // Board 수정
     @PutMapping("/{boardId}")
     public ResponseEntity<SuccessResponse<BoardUpdateResponse>> updateBoard(@PathVariable Long boardId, @RequestBody BoardUpdateRequest request) {
-        return ResponseEntity.ok(SuccessResponse.of(boardService.updateBoard(boardId, request)));
+        BoardUpdateResponse response = BoardUpdateResponse.from(boardService.updateBoard(boardId, request));
+        return ResponseEntity.ok(SuccessResponse.of(response));
     }
 
     // Board 삭제
