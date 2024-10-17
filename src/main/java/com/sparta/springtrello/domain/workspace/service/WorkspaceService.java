@@ -7,7 +7,7 @@ import com.sparta.springtrello.domain.user.authority.MemberAuthority;
 import com.sparta.springtrello.domain.user.repository.UserRepository;
 import com.sparta.springtrello.domain.workspace.dto.request.CreateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.request.InviteMemberRequestDto;
-import com.sparta.springtrello.domain.workspace.dto.request.UpdateWorkspaceRequestDto;
+import com.sparta.springtrello.domain.workspace.dto.request.updateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.response.WorkspaceResponseDto;
 import com.sparta.springtrello.entity.Workspace;
 import com.sparta.springtrello.domain.workspace.repository.WorkspaceRepository;
@@ -73,7 +73,7 @@ public class WorkspaceService {
     }
 
     @Transactional
-    public void updateWorkspace(AuthUser authUser, long id, UpdateWorkspaceRequestDto updateWorkspaceRequestDto) {
+    public void updateWorkspace(AuthUser authUser, long id, updateWorkspaceRequestDto updateWorkspaceRequestDto) {
         Workspace workspace = workspaceRepository.findByIdOrElseThrow(id);
 
         if(!authUser.getAuthorities().equals(MemberAuthority.WORKSPACE)){

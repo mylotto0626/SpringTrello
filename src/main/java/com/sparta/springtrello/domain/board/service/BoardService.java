@@ -1,26 +1,29 @@
 package com.sparta.springtrello.domain.board.service;
 
+import com.sparta.springtrello.common.dto.AuthUser;
 import com.sparta.springtrello.common.exception.NotFoundException;
 import com.sparta.springtrello.common.exception.UnauthorizedException;
 import com.sparta.springtrello.domain.board.dto.request.BoardCreateDto;
 import com.sparta.springtrello.domain.board.dto.request.BoardUpdateRequest;
 import com.sparta.springtrello.domain.board.dto.response.BoardResponse;
-import com.sparta.springtrello.domain.board.dto.response.BoardUpdateResponse;
 import com.sparta.springtrello.domain.board.repository.BoardRepository;
 import com.sparta.springtrello.domain.user.repository.UserRepository;
 import com.sparta.springtrello.entity.Board;
 import com.sparta.springtrello.entity.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 import static com.sparta.springtrello.common.exception.ResponseCode.*;
 
 @Service
+@Transactional(readOnly = true)
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -33,15 +36,16 @@ public class BoardService {
     }
 
     // 보드 생성
-    public BoardResponse createBoard(Long userId, BoardCreateDto boardCreateDto) {
+    @Transactional
+    public BoardResponse createBoard(AuthUser authUser, BoardCreateDto boardCreateDto) {
 
-        User user = userRepository.findById(userId).orElseThrow(() ->
+        User user = userRepository.findById(authUser.getId()).orElseThrow(() ->
                 new NotFoundException(NOT_FOUND_USER));
 
         Board newBoard = Board.from(user, boardCreateDto);
-        Board savedStore = boardRepository.save(newBoard);
+        Board savedBoard = boardRepository.save(newBoard);
 
-        return BoardResponse.from(savedStore);
+        return BoardResponse.from(savedBoard);
     }
 
 
@@ -54,21 +58,15 @@ public class BoardService {
     public Page<BoardResponse> getBoards(String name, int pageSize, int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
 
-        Page<Board> boards;
-
-        if (name == null || name.isEmpty()) {
-            boards = boardRepository.findByDeletedAtIsNull(pageable);
-        } else {
-            boards = boardRepository.findByNameContainingAndDeletedAtIsNull(name, pageable);
-        }
-
+        Page<Board> boards = null;
+        
         return boards.map(store -> {
             return BoardResponse.from(store);
         });
 
     }
 
-
+    @Transactional
     public Board updateBoard(Long boardId, BoardUpdateRequest request) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_BOARD));
@@ -79,12 +77,11 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
-    public void deleteBoard(Long boardId, String username) {
+    @Transactional
+    public void deleteBoard(Long boardId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_BOARD));
-        if (!board.getUser().getNickName().equals(username)) {
-            throw new UnauthorizedException(INVALID_USER_AUTHORITY);
-        }
+
         boardRepository.delete(board);
     }
 }

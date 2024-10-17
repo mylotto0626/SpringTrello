@@ -48,8 +48,8 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private boolean status;
 
-    @OneToMany(mappedBy = "user")
-    private List<Card> cards = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")
+//    private List<Card> cards = new ArrayList<>();
 
     public User(PostUserSignUpRequestDto requestDto,Authority authority, String pw) {
         this.email = requestDto.getEmail();
