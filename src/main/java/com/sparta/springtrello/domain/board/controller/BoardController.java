@@ -33,7 +33,7 @@ public class BoardController {
     }
 
 
-    // Board page 조회
+    // Board page 조회!
     @GetMapping
     public ResponseEntity<SuccessResponse<Page<BoardResponse>>> getBoards(
             @RequestParam(required = false) String name,
