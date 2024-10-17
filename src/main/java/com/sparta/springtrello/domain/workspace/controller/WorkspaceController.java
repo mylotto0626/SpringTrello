@@ -10,6 +10,7 @@ import com.sparta.springtrello.domain.workspace.service.WorkspaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,17 +26,17 @@ public class WorkspaceController {
     public ResponseEntity<String> createWorkspace(@Auth AuthUser authUser,
                                                   @RequestBody CreateWorkspaceRequestDto createWorkspaceRequestDto)
     {
-        workspaceService.createWorkspace(authUser, createWorkspaceRequestDto);
+       workspaceService.createWorkspace(authUser, createWorkspaceRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("워크스페이스 생성 완료");
     }
 
     // 워크 스페이스 멤버 초대
     @PostMapping("/workspaces/{id}/invite")
-    public ResponseEntity<String> inviteMember(@Auth AuthUser authUser,
-                                            @PathVariable long id,
-                                            @RequestBody InviteMemberRequestDto inviteMemberRequestDto){
+    public ResponseEntity<String> inviteMember(@AuthenticationPrincipal AuthUser authUser,
+                                               @PathVariable long id,
+                                               @RequestBody InviteMemberRequestDto inviteMemberRequestDto){
         workspaceService.inviteMember(authUser, id, inviteMemberRequestDto);
-        return ResponseEntity.status(HttpStatus.OK).body("초대가 완료되었 습니다.");
+        return ResponseEntity.status(HttpStatus.OK).body("초대 완료");
     }
 
     // 워크 스페이스 조회
@@ -47,7 +48,7 @@ public class WorkspaceController {
 
     // 워크 스페이스 수정
     @PutMapping("/workspaces/{id}")
-    public ResponseEntity<String> updateWorkspace(@Auth AuthUser authUser,
+    public ResponseEntity<String> updateWorkspace(@AuthenticationPrincipal AuthUser authUser,
                                                   @PathVariable long id,
                                                   @RequestBody UpdateWorkspaceRequestDto updateRequestDto){
         workspaceService.updateWorkspace(authUser, id, updateRequestDto);
@@ -56,10 +57,9 @@ public class WorkspaceController {
 
     // 워크 스페이스 삭제
     @DeleteMapping("/workspaces/{id}")
-    public ResponseEntity<String> deleteWorkspace(@Auth AuthUser authUser,
+    public ResponseEntity<String> deleteWorkspace(@AuthenticationPrincipal AuthUser authUser,
                                                   @PathVariable long id){
         workspaceService.deleteWorkspace(authUser, id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제완료");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("삭제 완료");
     }
-
 }
