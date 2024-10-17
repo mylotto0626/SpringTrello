@@ -15,8 +15,9 @@ public class Comment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
+    private String emoji;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -24,17 +25,20 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "card_id")
     private Card card;
 
-    public Comment(String content, User user, Card card){
+    public Comment(String content, User user, Card card, String emoji){
         this.content = content;
         this.user = user;
         this.card = card;
+        this.emoji = emoji;
     }
 
-    public Comment(String content) {
+    public Comment(String content, String emoji) {
         this.content = content;
+        this.emoji = emoji;
     }
 
-    public void update(String content) {
+    public void update(String content, String emoji) {
         this.content = content;
+        this.emoji = emoji;
     }
 }
