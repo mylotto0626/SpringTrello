@@ -2,7 +2,6 @@ package com.sparta.springtrello.domain.user.controller;
 
 
 
-import com.sparta.springtrello.common.annotation.Auth;
 import com.sparta.springtrello.common.dto.AuthUser;
 import com.sparta.springtrello.common.dto.ResponseDto;
 import com.sparta.springtrello.domain.user.dto.request.*;
@@ -13,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -41,7 +41,7 @@ public class UserController {
 
     //회원탈퇴 delete
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseDto<String>> deleteUser(@Auth AuthUser authUser, @RequestBody DeleteUserRequestDto deleteUserRequestDto){
+    public ResponseEntity<ResponseDto<String>> deleteUser(@AuthenticationPrincipal AuthUser authUser, @RequestBody DeleteUserRequestDto deleteUserRequestDto){
         userService.deleteUser(authUser,deleteUserRequestDto);
         return ResponseEntity.ok(new ResponseDto<>(HttpStatus.OK.value() , null , "회원 탈퇴하였습니다."));
     }
