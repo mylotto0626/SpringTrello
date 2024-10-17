@@ -23,7 +23,7 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    // Board 생성
+    // Board 생성!!
     @PostMapping
     public ResponseEntity<SuccessResponse<BoardResponse>> createBoard(
             @Auth AuthUser authUser, @Valid @RequestBody BoardCreateDto request
