@@ -10,19 +10,19 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum MemberAuthority {
 
-    READ_ONLY(UserAuthority.READONLY),
-    WORKSPACE(UserAuthority.WORKSPACE),
-    BOARD(UserAuthority.BOARD);
+    READ_ONLY(MemberAuthority.UserMemberAuthority.READONLY),
+    WORKSPACE(MemberAuthority.UserMemberAuthority.WORKSPACE),
+    BOARD(MemberAuthority.UserMemberAuthority.BOARD);
 
-    private final String memberAuthority;
+    private final String Authority;
 
-    public static Authority of(String role) {
-        return Arrays.stream(Authority.values())
+    public static MemberAuthority of(String role) {
+        return Arrays.stream(MemberAuthority.values())
                 .filter(r -> r.name().equalsIgnoreCase(role))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 UserRole"));
     }
-    public static class UserAuthority {
+    public static class UserMemberAuthority {
         public static final String READONLY = "ROLE_READONLY";
         public static final String WORKSPACE = "ROLE_WORKSPACE";
         public static final String BOARD = "ROLE_BOARD";

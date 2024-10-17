@@ -14,9 +14,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "user_id")
+@Table(name = "user")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class User extends Timestamped {
 
     @Id
@@ -62,7 +62,7 @@ public class User extends Timestamped {
         this.status = false;
     }
 
-    public void updateRole(Authority authority) {
-        this.authority = authority;
+    public void updateRole(MemberAuthority memberAuthority) {
+        this.memberAuthority = memberAuthority;
     }
 }

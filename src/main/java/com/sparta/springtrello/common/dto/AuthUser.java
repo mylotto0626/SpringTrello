@@ -2,7 +2,10 @@ package com.sparta.springtrello.common.dto;
 
 
 import com.sparta.springtrello.domain.user.authority.Authority;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -16,6 +19,7 @@ public class AuthUser {
     private final String email;
     private final String nickName;
     private final Collection<? extends GrantedAuthority> authorities;
+
 
     public AuthUser(Long id, String email,String nickName, Authority role) {
         this.id = id;
