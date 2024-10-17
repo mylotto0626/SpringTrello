@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class ListController {
     private final ListService listService;
 
-    // 리스트 생성
+    // 리스트 생성!!!
     @PostMapping
     public ResponseEntity<String> createList(
             AuthUser authUser, @Valid @RequestBody ListCreateDto request
