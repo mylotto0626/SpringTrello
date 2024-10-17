@@ -16,12 +16,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "user")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class User extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private Long id;
 
     @Column(name = "email", unique = true)
@@ -63,7 +62,7 @@ public class User extends Timestamped {
         this.status = false;
     }
 
-    public void updateRole(Authority authority) {
-        this.authority = authority;
+    public void updateRole(MemberAuthority memberAuthority) {
+        this.memberAuthority = memberAuthority;
     }
 }

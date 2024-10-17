@@ -1,6 +1,7 @@
 package com.sparta.springtrello.domain.user.dto.request;
 
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserRoleChangeRequest {
 
-    private String role;
+    @NotBlank
+    private String memberRole;
 }
