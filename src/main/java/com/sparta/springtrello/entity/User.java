@@ -4,7 +4,6 @@ import com.sparta.springtrello.common.entity.Timestamped;
 import com.sparta.springtrello.domain.card.entity.Card;
 import com.sparta.springtrello.domain.user.authority.Authority;
 import com.sparta.springtrello.domain.user.authority.MemberAuthority;
-import com.sparta.springtrello.domain.user.dto.request.PatchUserRequestDto;
 import com.sparta.springtrello.domain.user.dto.request.PostUserSignUpRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -56,7 +55,7 @@ public class User extends Timestamped {
         this.nickName = requestDto.getNickName();
         this.pw = pw;
         this.authority = authority;
-        this.memberAuthority = MemberAuthority.WORKSPACE;
+        this.memberAuthority = MemberAuthority.READ_ONLY;
         this.status = true;
     }
 
@@ -64,8 +63,7 @@ public class User extends Timestamped {
         this.status = false;
     }
 
-    public void update(String pw, PatchUserRequestDto requestDto) {
-        this.authority = requestDto.getAuthority() != null ? requestDto.getAuthority() : this.authority;
-        this.pw = requestDto.getPw() != null ? pw : this.pw;
+    public void updateRole(Authority authority) {
+        this.authority = authority;
     }
 }
