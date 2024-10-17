@@ -27,6 +27,8 @@ public class Board {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    private boolean deletedAt;
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ListEntity> lists = new ArrayList<>();
 
@@ -39,20 +41,16 @@ public class Board {
     @JoinColumn(name = "workspace", nullable = false)
     private Workspace workspace;
 
-    private Board(User user, String name, LocalDateTime createdAt, LocalDateTime modifiedAt){
+    private Board(User user, String name){
         this.user = user;
         this.name = name;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
     }
 
 
     public static Board from(User user, BoardCreateDto boardCreateDto) {
         return new Board(
                 user,
-                boardCreateDto.getName(),
-                boardCreateDto.getCreatedAt(),
-                boardCreateDto.getModifiedAt()
+                boardCreateDto.getName()
         );
     }
 
