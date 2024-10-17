@@ -13,7 +13,7 @@ public class BoardDetailResponse {
 
     public static BoardDetailResponse from(Board board){
         return new BoardDetailResponse(
-                store.getName()
+                board.getName()
         );
     }
 }

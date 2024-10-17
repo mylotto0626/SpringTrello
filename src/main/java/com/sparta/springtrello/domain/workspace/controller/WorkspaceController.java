@@ -2,7 +2,6 @@ package com.sparta.springtrello.domain.workspace.controller;
 
 import com.sparta.springtrello.common.annotation.Auth;
 import com.sparta.springtrello.common.dto.AuthUser;
-import com.sparta.springtrello.common.response.SuccessResponse;
 import com.sparta.springtrello.domain.workspace.dto.request.CreateWorkspaceRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.request.InviteMemberRequestDto;
 import com.sparta.springtrello.domain.workspace.dto.request.UpdateWorkspaceRequestDto;

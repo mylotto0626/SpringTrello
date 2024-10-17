@@ -9,6 +9,7 @@ import com.sparta.springtrello.domain.card.entity.Card;
 import com.sparta.springtrello.domain.card.repository.CardRepository;
 import com.sparta.springtrello.domain.comment.dto.request.UpdateCommentRequestDto;
 import com.sparta.springtrello.domain.comment.dto.request.addCommentRequestDto;
+import com.sparta.springtrello.domain.list.repository.ListRepository;
 import com.sparta.springtrello.domain.user.authority.MemberAuthority;
 import com.sparta.springtrello.domain.workspace.repository.WorkspaceRepository;
 import com.sparta.springtrello.entity.Board;
@@ -31,6 +32,7 @@ public class CommentService {
     private final CardRepository cardRepository;
     private final BoardRepository boardRepository;
     private final WorkspaceRepository workspaceRepository;
+    private final ListRepository listRepository;
 
 
     // 댓글 등록
@@ -39,7 +41,7 @@ public class CommentService {
        Card card = cardRepository.findById(cardId)
                .orElseThrow(() -> new NoSuchElementException(ResponseCode.NOT_FOUND_CARD.getMessage()));
 
-//       List list = listRepository.findById()
+//       List list = listRepository.findById(authUser.getId())
 //                .orElseThrow(() -> new NoSuchElementException(ResponseCode.NOT_FOUND_LIST.getMessage()));
 
         Board board = boardRepository.findById(authUser.getId())
