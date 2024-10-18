@@ -35,9 +35,9 @@ public class Card extends Timestamped {
 
     @Builder
     public Card(CardRequestDto requestDto, ListEntity list) {
-        this.title = title;
-        this.contents = contents;
-        this.dueDate = dueDate;
+        this.title = requestDto.getTitle();       // requestDto에서 title 초기화
+        this.contents = requestDto.getContents(); // requestDto에서 contents 초기화
+        this.dueDate = requestDto.getDueDate();   // requestDto에서 dueDate 초기화
         this.list = list;
     }
 

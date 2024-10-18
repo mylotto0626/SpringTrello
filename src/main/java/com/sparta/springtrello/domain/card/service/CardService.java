@@ -15,6 +15,8 @@ import com.sparta.springtrello.entity.User;
 import com.sparta.springtrello.entity.Workspace;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,6 +97,17 @@ public class CardService {
 
         // 카드 삭제
         cardRepository.deleteById(card.getId());
+    }
+
+    // 카드 검색
+    public Page<CardResponseDto> searchCards(Long workspaceId, Long boardId, Long listId,
+                                             String title, String contents, String dueDate, String assigneeName,
+                                             Long userId, Pageable pageable) {
+        // 검색 조건에 맞는 카드 조회
+        Page<Card> cards = cardRepository.searchCards(listId, userId, title, contents, dueDate, assigneeName, pageable);
+
+
+        return cards.map(CardResponseDto::new);
     }
 
     // 카드 존재 여부

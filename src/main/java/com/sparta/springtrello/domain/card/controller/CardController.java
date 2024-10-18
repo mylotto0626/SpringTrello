@@ -5,6 +5,9 @@ import com.sparta.springtrello.domain.card.dto.CardRequestDto;
 import com.sparta.springtrello.domain.card.dto.CardResponseDto;
 import com.sparta.springtrello.domain.card.service.CardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -56,5 +59,23 @@ public class CardController {
                                              @AuthenticationPrincipal AuthUser authUser) {
         cardService.deleteCard(authUser.getId(), workspaceId, boardId, listId, cardId);
         return ResponseEntity.ok("카드 삭제 완료");
+    }
+
+    // 카드 검색
+    @GetMapping("/search")
+    public ResponseEntity<Page<CardResponseDto>> searchCards(
+            @PathVariable Long workspaceId,
+            @PathVariable Long boardId,
+            @PathVariable Long listId,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String contents,
+            @RequestParam(required = false) String dueDate,
+            @RequestParam(required = false) String assigneeName,
+            @AuthenticationPrincipal AuthUser authUser,
+            @PageableDefault(size = 10) Pageable pageable) {
+
+        // AuthUser와 Pageable을 올바르게 전달
+        Page<CardResponseDto> result = cardService.searchCards(workspaceId, boardId, listId, title, contents, dueDate, assigneeName, authUser.getId(), pageable);
+        return ResponseEntity.ok(result);
     }
 }
