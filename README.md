@@ -53,5 +53,3 @@
 # ⚒️ ERD Diagram
 <img width="1571" alt="image" src="https://github.com/user-attachments/assets/ecc126e0-87e9-4c1b-81f3-6263d1fc9e7d">
 
-
-#  📊 SQL
